@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # coding=utf-8
+import requests
 import os
 from os.path import expanduser
 import subprocess
@@ -69,56 +70,15 @@ def run_sqlplus(query, profile):
     else:
         return stdout
 
-def estimate():
-    total_tables = 2200
-    total_size = 85
 
-    so_far = how_long()
-
-    print "Estimativa"
-    print "-" * 60
-    print "Tempo de Importação(Minutos):%s" % so_far[0]
-    print "Total de tabelas no PostgreSQL:%s" % total_tables
-    print "Tamanho no banco no PostgreSQL(GB):%s" % total_size
-
+def get_query_output(query):
     profile = define_system_profile('OracleLinux')
 
-    size_query = "%s SELECT trunc((sum(bytes)/1024/1024/1024),2) AS SIZE_GB FROM user_segments;" % sqlplus_header()
+    query = "%s %s" % (sqlplus_header(), query)
 
-    table_query = "%s SELECT count(*) FROM user_tables;" % sqlplus_header()
+    stdout = run_sqlplus(query, profile)
 
-    stdout = run_sqlplus(size_query, profile)
-    tables_so_far = run_sqlplus(table_query, profile).strip()
-
-    size = stdout.strip().replace(",", ".")
-
-    percent_complete = float(size) * 100 / float(total_size)
-    table_percent_complete = int(tables_so_far) * 100 / int(total_tables)
-
-    print u"Estimativa por Size(Porcentagem):%.2f" % percent_complete
-    print u"Estimativa por Tabelas Completas(Porcentagem):%s" % table_percent_complete
-    print "-" * 60
-
-    print "Tempo Final Estimado"
-    print "-" * 60
-
-    if percent_complete < 1:
-        tempo_estimado_size = int(so_far[0]) * 100 / int(1)
-        print u"Estimativa de tempo por Size(Horas):%s" % int(tempo_estimado_size/60)
-    else:
-        tempo_estimado_size = int(so_far[0]) * 100 / int(percent_complete)
-        print u"Estimativa de tempo por Size(Horas):%s" % int(tempo_estimado_size/60)
-
-    if table_percent_complete < 1:
-        tempo_estimado = int(so_far[0]) * 100 / int(1)
-        print u"Estimativa de tempo por Tabelas Completas(Horas):%s" % int(tempo_estimado/60)
-    else:
-        tempo_estimado = int(so_far[0]) * 100 / int(table_percent_complete)
-        print u"Estimativa de tempo por Tabelas Completas(Horas):%s" % int(tempo_estimado/60)
-
-    print "-" * 60
-
-
+    return "%s" % stdout.strip().replace(',','.')
 
 def how_long():
     data_inicio = datetime.strptime('30/06/2016 12:18:00', "%d/%m/%Y %H:%M:%S")
@@ -127,25 +87,23 @@ def how_long():
     diff = now - data_inicio
     return divmod(diff.days * 86400 + diff.seconds, 60)
 
-
-def print_query(query, msg):
-    profile = define_system_profile('OracleLinux')
-
-    query = "%s %s" % (sqlplus_header(), query)
-
-    stdout = run_sqlplus(query, profile)
-
-    print "%s%s" % (msg, stdout.strip())
-
-
 table_query = "SELECT count(*) FROM user_tables;"
 size_query = "SELECT trunc((sum(bytes)/1024/1024/1024),2) AS SIZE_GB FROM user_segments;"
 last_table = "select * from (select table_name from user_tables where table_name not like 'TOP_%' order by 1 desc) where rownum <=1;"
 
-print "Monitor"
-print "-"*60
-print_query(table_query, "Total de Tabelas:")
-print_query(size_query, "Tamanho Atual(GB):")
-print_query(last_table, u"Última tabela importada:")
-print "-"*60
-estimate()
+total_tabelas = get_query_output(table_query)
+tamanho_atual = get_query_output(size_query)
+ultima_tabela = get_query_output(last_table)
+tempo_importacao = how_long()[0]
+
+result = {
+  "tamanho_atual": tamanho_atual,
+  "tempo_importacao": tempo_importacao,
+  "total_tabelas": total_tabelas,
+  "ultima_tabela": ultima_tabela
+}
+endpoint = "http://ptimonitor.lb2.com.br/sendresult"
+r = requests.post(endpoint, json = result)
+if r.status_code != 201:
+    print "Erro ao enviar coleta de dados"
+    exit(1)
