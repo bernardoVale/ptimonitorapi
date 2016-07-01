@@ -3,6 +3,7 @@ from flask import Blueprint, render_template, jsonify, request
 from flask_api import status
 from app.models import db, Result
 from app.utils import estimate
+from datetime import datetime
 main = Blueprint('main', __name__)
 
 TOTAL_TABELAS = 2200
@@ -22,7 +23,8 @@ def hello_world():
 
     return render_template("monitor.html", title="PTI Monitor", result=resultado,
                            estimate_tables= "%.2f" % estimate_tables, estimate_size="%.2f" % estimate_size,
-                           time_tables=estimate_time_tables, time_size=estimate_time_size)
+                           time_tables=estimate_time_tables, time_size=estimate_time_size,
+                           data_coleta=resultado.data_coleta.strftime(("%d/%m/%Y %H:%M:%S")))
 
 
 @main.route("/pushresult/<string:tamanho_atual>/<string:tempo_importacao>/<string:total_tabelas>/"
@@ -48,6 +50,7 @@ def send_result():
         r.tempo_importacao = result["tempo_importacao"]
         r.total_tabelas = result["total_tabelas"]
         r.ultima_tabela = result["ultima_tabela"]
+        r.data_coleta = datetime.strptime(result["data_coleta"], "%d/%m/%Y %H:%M:%S")
         db.session.add(r)
         db.session.commit()
     except:

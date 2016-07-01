@@ -1,12 +1,14 @@
 import requests
+from datetime import datetime
+endpoint = "http://127.0.0.1:5000/sendresult"
 
-endpoint = "http://10.200.0.126:86/sendresult"
-
+coleta = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
 result = {
-  "tamanho_atual": "45",
-  "tempo_importacao": "780",
-  "total_tabelas": "1340",
-  "ultima_tabela": "ZYS010"
+  "tamanho_atual": "50",
+  "tempo_importacao": "120",
+  "total_tabelas": "1940",
+  "ultima_tabela": "ZYS010",
+  "data_coleta": coleta,
 }
 r = requests.post(endpoint, json = result)
 
