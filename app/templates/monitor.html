@@ -1,0 +1,65 @@
+<html>
+  <head>
+    <title>Flask Intro</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="static/bootstrap.min.css" rel="stylesheet" media="screen">
+  </head>
+  <body>
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+      <h1 class="page-header">Informações Gerais</h1>
+
+      <div class="row placeholders">
+        <div class="col-xs-6 col-sm-3 placeholder">
+          <h4>Tamanho do Banco</h4>
+          <span class="text-muted">85GB</span>
+        </div>
+        <div class="col-xs-6 col-sm-3 placeholder">
+          <h4>Total de Tabelas</h4>
+          <span class="text-muted">2200</span>
+        </div>
+        <div class="col-xs-6 col-sm-6 placeholder">
+          <h4>Tempo de Importação(Minutos)</h4>
+          <span class="text-muted">{{result.tempo_importacao}}</span>
+        </div>
+      </div>
+      <div class="row placeholders">
+        <div class="col-xs-6 col-sm-3 placeholder">
+          <h4>Total de Tabelas (Atual)</h4>
+          <span class="text-muted">{{result.total_tabelas}}</span>
+        </div>
+        <div class="col-xs-6 col-sm-3 placeholder">
+          <h4>Tamanho Atual</h4>
+          <span class="text-muted">{{result.tamanho_atual}}GB</span>
+        </div>
+        <div class="col-xs-6 col-sm-3 placeholder">
+          <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Capudo">
+          <h4>Última Tabela Importada</h4>
+          <span class="text-muted">{{result.ultima_tabela}}</span>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+        <h1 class="page-header">Estimativa de Tempo</h1>
+       <div class="row placeholders">
+        <div class="col-xs-6 col-sm-6 placeholder">
+          <h4>Completo % por Tamanho</h4>
+          <span class="text-muted">{{estimate_size}}%</span>
+        </div>
+        <div class="col-xs-6 col-sm-6 placeholder">
+          <h4>Completo % por Tabelas Importadas</h4>
+          <span class="text-muted">{{estimate_tables}}%</span>
+        </div>
+      </div>
+      <div class="row placeholders">
+        <div class="col-xs-6 col-sm-6 placeholder">
+          <h4>Estimativa de tempo por Tamanho</h4>
+          <span class="text-muted">{{time_size}}</span>
+        </div>
+        <div class="col-xs-6 col-sm-6 placeholder">
+          <h4>Estimativa de tempo por Tabelas Completas</h4>
+          <span class="text-muted">{{time_tables}}</span>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
