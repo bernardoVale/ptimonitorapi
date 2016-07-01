@@ -10,7 +10,7 @@ web:
   environment:
     - APP_ENV=PROD
   ports:
-    - "81:80"
+    - "80:80"
 
 data:
   image: postgres:latest
@@ -24,4 +24,4 @@ postgres:
   volumes_from:
     - data
   ports:
-    - "5433:5432"
+    - "5432:5432"

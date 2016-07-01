@@ -9,7 +9,7 @@ class Config(object):
     DB_USER = 'postgres'
     DB_PASS = 'postgres'
     DB_SERVICE = 'postgres'
-    DB_PORT = 5433
+    DB_PORT = 5432
     SQLALCHEMY_DATABASE_URI = 'postgresql://{0}:{1}@{2}:{3}/{4}'.format(
         DB_USER, DB_PASS, DB_SERVICE, DB_PORT, DB_NAME
     )
@@ -17,7 +17,6 @@ class Config(object):
 class ProdConfig(Config):
     ENV = 'prod'
     CACHE_TYPE = 'simple'
-    DB_PORT = 5432
 
 
 class DevConfig(Config):

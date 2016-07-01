@@ -21,6 +21,9 @@ def percent_completo(sofar, total):
 def time_to_go(so_far, percent_complete):
 
     if percent_complete < 1:
-        return str(int(so_far[0]) * 100 / int(1))
+        total = int(so_far) * 100 / int(1)
     else:
-        return str(int(so_far[0]) * 100 / int(percent_complete))
+        total = int(so_far) * 100 / int(percent_complete)
+
+    to_go = float((total - so_far)/60)
+    return "%s horas" % str(to_go)

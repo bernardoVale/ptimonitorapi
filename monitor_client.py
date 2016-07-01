@@ -1,12 +1,12 @@
 import requests
 
-endpoint = "http://127.0.0.1:5000/sendresult"
+endpoint = "http://10.200.0.126:86/sendresult"
 
 result = {
   "tamanho_atual": "45",
-  "tempo_importacao": "730",
+  "tempo_importacao": "780",
   "total_tabelas": "1340",
-  "ultima_tabela": "SX1010"
+  "ultima_tabela": "ZYS010"
 }
 r = requests.post(endpoint, json = result)
 

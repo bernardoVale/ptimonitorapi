@@ -13,14 +13,12 @@ def hello_world():
 
     resultado = Result.query.all()[-1]
 
-    so_far = estimate.how_long()
-
     estimate_tables = estimate.percent_completo(resultado.total_tabelas, TOTAL_TABELAS)
     estimate_size = estimate.percent_completo(resultado.tamanho_atual, TOTAL_SIZE)
 
 
-    estimate_time_tables = estimate.time_to_go(so_far, estimate_tables)
-    estimate_time_size = estimate.time_to_go(so_far, estimate_size)
+    estimate_time_tables = estimate.time_to_go(resultado.tempo_importacao, estimate_tables)
+    estimate_time_size = estimate.time_to_go(resultado.tempo_importacao, estimate_size)
 
     return render_template("monitor.html", title="PTI Monitor", result=resultado,
                            estimate_tables= "%.2f" % estimate_tables, estimate_size="%.2f" % estimate_size,
