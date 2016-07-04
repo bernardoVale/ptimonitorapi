@@ -24,7 +24,8 @@ def hello_world():
     return render_template("monitor.html", title="PTI Monitor", result=resultado,
                            estimate_tables= "%.2f" % estimate_tables, estimate_size="%.2f" % estimate_size,
                            time_tables=estimate_time_tables, time_size=estimate_time_size,
-                           data_coleta=resultado.data_coleta.strftime(("%d/%m/%Y %H:%M:%S")))
+                           data_coleta=resultado.data_coleta.strftime(("%d/%m/%Y %H:%M:%S")),
+                           total_tabelas=TOTAL_TABELAS, total_size=TOTAL_SIZE)
 
 
 @main.route("/pushresult/<string:tamanho_atual>/<string:tempo_importacao>/<string:total_tabelas>/"
