@@ -6,8 +6,8 @@ from app.utils import estimate
 from datetime import datetime
 main = Blueprint('main', __name__)
 
-TOTAL_TABELAS = 2200
-TOTAL_SIZE = 85
+TOTAL_TABELAS = 2089
+TOTAL_SIZE = 41.19
 
 @main.route('/')
 def hello_world():
